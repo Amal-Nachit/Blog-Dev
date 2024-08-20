@@ -19,7 +19,7 @@ class ArticleType extends AbstractType
             ->add('image')
             ->add('text')
             ->add('status')
-            ->add('categorie', EntityType::class, [
+            ->add('articleCategorie', EntityType::class, [
                 'class' => categorie::class,
                 'choice_label' => 'id',
                 'multiple' => true,
@@ -28,6 +28,7 @@ class ArticleType extends AbstractType
                 'class' => user::class,
                 'choice_label' => 'id',
             ])
+            ->add('createdAt')
         ;
     }
 

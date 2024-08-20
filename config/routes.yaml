@@ -11,3 +11,7 @@ home:
 admin:
     path: /admin
     controller: App\Controller\AdminController::index
+
+login:
+    path: /login
+    controller: App\Controller\SecurityController::index

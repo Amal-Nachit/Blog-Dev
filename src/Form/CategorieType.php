@@ -15,11 +15,6 @@ class CategorieType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('articleToCategorie', EntityType::class, [
-                'class' => Article::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
         ;
     }
 

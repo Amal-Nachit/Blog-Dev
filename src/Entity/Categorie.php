@@ -21,12 +21,12 @@ class Categorie
     /**
      * @var Collection<int, Article>
      */
-    #[ORM\ManyToMany(targetEntity: Article::class, mappedBy: 'categorie')]
-    private Collection $articleToCategorie;
+    #[ORM\ManyToMany(targetEntity: Article::class, inversedBy: 'articleCategorie')]
+    private Collection $categorieArticle;
 
     public function __construct()
     {
-        $this->articleToCategorie = new ArrayCollection();
+        $this->categorieArticle = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -49,26 +49,23 @@ class Categorie
     /**
      * @return Collection<int, Article>
      */
-    public function getArticleToCategorie(): Collection
+    public function getCategorieArticle(): Collection
     {
-        return $this->articleToCategorie;
+        return $this->categorieArticle;
     }
 
-    public function addArticleToCategorie(Article $articleToCategorie): static
+    public function addCategorieArticle(Article $categorieArticle): static
     {
-        if (!$this->articleToCategorie->contains($articleToCategorie)) {
-            $this->articleToCategorie->add($articleToCategorie);
-            $articleToCategorie->addCategorie($this);
+        if (!$this->categorieArticle->contains($categorieArticle)) {
+            $this->categorieArticle->add($categorieArticle);
         }
 
         return $this;
     }
 
-    public function removeArticleToCategorie(Article $articleToCategorie): static
+    public function removeCategorieArticle(Article $categorieArticle): static
     {
-        if ($this->articleToCategorie->removeElement($articleToCategorie)) {
-            $articleToCategorie->removeCategorie($this);
-        }
+        $this->categorieArticle->removeElement($categorieArticle);
 
         return $this;
     }
