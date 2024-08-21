@@ -7,40 +7,59 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Annotation\Groups as AnnotationGroups;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
+#[Vich\Uploadable]
 class Article
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['api_article_liste'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['api_article_liste'], ['api_article_show'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['api_article_liste'], ['api_article_show'])]
     private ?string $image = null;
 
     #[ORM\Column(type: Types::BLOB)]
+    #[Groups(['api_article_liste'], ['api_article_show'])]
     private $text;
 
     #[ORM\Column]
     private ?bool $status = null;
 
-    /**
-     * @var Collection<int, categorie>
-     */
-    #[ORM\ManyToMany(targetEntity: categorie::class, inversedBy: 'articleToCategorie')]
-    private Collection $categorie;
-
     #[ORM\ManyToOne(inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['api_article_liste'], ['api_article_show'])]
     private ?user $creator = null;
+
+    #[Vich\UploadableField(mapping: 'thumbnail', fileNameProperty: 'image')]
+    #[Assert\Image()]
+    private ?File $thumbnailFile = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    /**
+     * @var Collection<int, Categorie>
+     */
+    #[ORM\ManyToMany(targetEntity: Categorie::class, mappedBy: 'categorieArticle')]
+    // #[Groups(['api_article_liste'], ['api_article_show'])]
+    private Collection $articleCategorie;
 
     public function __construct()
     {
-        $this->categorie = new ArrayCollection();
+        $this->articleCategorie = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -96,30 +115,6 @@ class Article
         return $this;
     }
 
-    /**
-     * @return Collection<int, categorie>
-     */
-    public function getCategorie(): Collection
-    {
-        return $this->categorie;
-    }
-
-    public function addCategorie(categorie $categorie): static
-    {
-        if (!$this->categorie->contains($categorie)) {
-            $this->categorie->add($categorie);
-        }
-
-        return $this;
-    }
-
-    public function removeCategorie(categorie $categorie): static
-    {
-        $this->categorie->removeElement($categorie);
-
-        return $this;
-    }
-
     public function getCreator(): ?user
     {
         return $this->creator;
@@ -131,4 +126,62 @@ class Article
 
         return $this;
     }
+
+    /**
+     * Get the value of thumbnailFile
+     */
+    public function getThumbnailFile(): ?File
+    {
+        return $this->thumbnailFile;
+    }
+
+    /**
+     * Set the value of thumbnailFile
+     */
+    public function setThumbnailFile(?File $thumbnailFile): static
+    {
+        $this->thumbnailFile = $thumbnailFile;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Categorie>
+     */
+    public function getArticleCategorie(): Collection
+    {
+        return $this->articleCategorie;
+    }
+
+    public function addArticleCategorie(Categorie $articleCategorie): static
+    {
+        if (!$this->articleCategorie->contains($articleCategorie)) {
+            $this->articleCategorie->add($articleCategorie);
+            $articleCategorie->addCategorieArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticleCategorie(Categorie $articleCategorie): static
+    {
+        if ($this->articleCategorie->removeElement($articleCategorie)) {
+            $articleCategorie->removeCategorieArticle($this);
+        }
+
+        return $this;
+    }
+
 }

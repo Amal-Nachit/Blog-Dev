@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\Article;
 use App\Entity\categorie;
-use App\Entity\user;
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,15 +19,16 @@ class ArticleType extends AbstractType
             ->add('image')
             ->add('text')
             ->add('status')
-            ->add('categorie', EntityType::class, [
+            ->add('articleCategorie', EntityType::class, [
                 'class' => categorie::class,
                 'choice_label' => 'id',
                 'multiple' => true,
             ])
             ->add('creator', EntityType::class, [
-                'class' => user::class,
+                'class' => User::class,
                 'choice_label' => 'id',
             ])
+            ->add('createdAt')
         ;
     }
 
