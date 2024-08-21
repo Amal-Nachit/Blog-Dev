@@ -20,28 +20,24 @@ class Article
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['api_article_liste'])]
+    #[Groups(['article.index'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['api_article_liste'], ['api_article_show'])]
+    #[Groups(['article.index', 'article.show'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['api_article_liste'], ['api_article_show'])]
+    #[Groups(['article.index', 'article.show'])]
     private ?string $image = null;
-
-    #[ORM\Column(type: Types::BLOB)]
-    #[Groups(['api_article_liste'], ['api_article_show'])]
-    private $text;
 
     #[ORM\Column]
     private ?bool $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['api_article_liste'], ['api_article_show'])]
-    private ?user $creator = null;
+    #[Groups(['article.index', 'article.show'])]
+    private ?User $creator = null;
 
     #[Vich\UploadableField(mapping: 'thumbnail', fileNameProperty: 'image')]
     #[Assert\Image()]
@@ -54,8 +50,10 @@ class Article
      * @var Collection<int, Categorie>
      */
     #[ORM\ManyToMany(targetEntity: Categorie::class, mappedBy: 'categorieArticle')]
-    // #[Groups(['api_article_liste'], ['api_article_show'])]
     private Collection $articleCategorie;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $text = null;
 
     public function __construct()
     {
@@ -87,18 +85,6 @@ class Article
     public function setImage(string $image): static
     {
         $this->image = $image;
-
-        return $this;
-    }
-
-    public function getText()
-    {
-        return $this->text;
-    }
-
-    public function setText($text): static
-    {
-        $this->text = $text;
 
         return $this;
     }
@@ -180,6 +166,18 @@ class Article
         if ($this->articleCategorie->removeElement($articleCategorie)) {
             $articleCategorie->removeCategorieArticle($this);
         }
+
+        return $this;
+    }
+
+    public function getText(): ?string
+    {
+        return $this->text;
+    }
+
+    public function setText(string $text): static
+    {
+        $this->text = $text;
 
         return $this;
     }
