@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Annotation\Groups as AnnotationGroups;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -19,18 +20,19 @@ class Article
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('[article.index]')]
+    #[Groups(['api_article_liste'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups('[article.index], [article.show]')]
+    #[Groups(['api_article_liste'], ['api_article_show'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups('[article.index], [article.show]')]
+    #[Groups(['api_article_liste'], ['api_article_show'])]
     private ?string $image = null;
 
     #[ORM\Column(type: Types::BLOB)]
+    #[Groups(['api_article_liste'], ['api_article_show'])]
     private $text;
 
     #[ORM\Column]
@@ -38,6 +40,7 @@ class Article
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['api_article_liste'], ['api_article_show'])]
     private ?user $creator = null;
 
     #[Vich\UploadableField(mapping: 'thumbnail', fileNameProperty: 'image')]
@@ -51,6 +54,7 @@ class Article
      * @var Collection<int, Categorie>
      */
     #[ORM\ManyToMany(targetEntity: Categorie::class, mappedBy: 'categorieArticle')]
+    // #[Groups(['api_article_liste'], ['api_article_show'])]
     private Collection $articleCategorie;
 
     public function __construct()

@@ -15,3 +15,7 @@ admin:
 login:
     path: /login
     controller: App\Controller\SecurityController::index
+
+api_article_:
+    path: /api/article
+    controller: App\Controller\API\ArticleController::index
