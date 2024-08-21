@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -20,9 +21,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['article.index', 'article.show'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Groups(['article.index', 'article.show'])]
     private ?string $email = null;
 
     /**
@@ -38,9 +41,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['article.index', 'article.show'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['article.index', 'article.show'])]
     private ?string $lastname = null;
 
     /**

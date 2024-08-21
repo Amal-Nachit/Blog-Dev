@@ -44,21 +44,16 @@ class Article
     private ?File $thumbnailFile = null;
 
     #[ORM\Column]
+    #[Groups(['article.index', 'article.show'])]
     private ?\DateTimeImmutable $createdAt = null;
 
-    /**
-     * @var Collection<int, Categorie>
-     */
-    #[ORM\ManyToMany(targetEntity: Categorie::class, mappedBy: 'categorieArticle')]
-    private Collection $articleCategorie;
-
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['article.index', 'article.show'])]
     private ?string $text = null;
 
-    public function __construct()
-    {
-        $this->articleCategorie = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+    #[Groups(['article.index', 'article.show'])]
+    private ?Categorie $categorie = null;
 
     public function getId(): ?int
     {
@@ -143,32 +138,6 @@ class Article
         return $this;
     }
 
-    /**
-     * @return Collection<int, Categorie>
-     */
-    public function getArticleCategorie(): Collection
-    {
-        return $this->articleCategorie;
-    }
-
-    public function addArticleCategorie(Categorie $articleCategorie): static
-    {
-        if (!$this->articleCategorie->contains($articleCategorie)) {
-            $this->articleCategorie->add($articleCategorie);
-            $articleCategorie->addCategorieArticle($this);
-        }
-
-        return $this;
-    }
-
-    public function removeArticleCategorie(Categorie $articleCategorie): static
-    {
-        if ($this->articleCategorie->removeElement($articleCategorie)) {
-            $articleCategorie->removeCategorieArticle($this);
-        }
-
-        return $this;
-    }
 
     public function getText(): ?string
     {
@@ -178,6 +147,18 @@ class Article
     public function setText(string $text): static
     {
         $this->text = $text;
+
+        return $this;
+    }
+
+    public function getCategorie(): ?Categorie
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?Categorie $categorie): static
+    {
+        $this->categorie = $categorie;
 
         return $this;
     }

@@ -19,3 +19,7 @@ login:
 api_article_:
     path: /api/article
     controller: App\Controller\API\ArticleController::index
+
+app_article_index:
+    path: /article
+    controller: App\Controller\ArticleController::index
