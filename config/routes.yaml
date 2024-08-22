@@ -16,10 +16,10 @@ login:
     path: /login
     controller: App\Controller\SecurityController::index
 
-api_article_:
-    path: /api/article
+api_article:
+    path: /api/articles
     controller: App\Controller\API\ArticleController::index
 
 app_article_index:
-    path: /article
+    path: /articles
     controller: App\Controller\ArticleController::index
