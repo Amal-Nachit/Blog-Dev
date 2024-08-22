@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
@@ -12,12 +13,15 @@ class Comment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['article.show'])]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::BLOB)]
+    #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['article.show'])]
     private $text;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[Groups(['article.show'])]
     private ?User $userComment = null;
 
     public function getId(): ?int
