@@ -20,7 +20,7 @@ class Article
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['article.index'])]
+    #[Groups(['article.index', 'article.show'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]

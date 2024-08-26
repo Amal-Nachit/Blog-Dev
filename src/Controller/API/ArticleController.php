@@ -20,7 +20,7 @@ class ArticleController extends AbstractController {
         ]);
     }
 
-    #[Route('/{id}', name:"show", requirements: ['id' => Requirement::DIGITS])]
+    #[Route('/api/articles/{id}', name:"show", requirements: ['id' => Requirement::DIGITS])]
     public function show(Article $article): JsonResponse {
 
         return $this->json($article, 200, [], [
