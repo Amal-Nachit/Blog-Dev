@@ -17,8 +17,23 @@ class ArticleController extends AbstractController
     #[Route('/', name: 'article_index', methods: ['GET'])]
     public function index(ArticleRepository $articleRepository): Response
     {
+        $articles = $articleRepository->findAll();
+        $articlesDetails = [];
+        foreach ($articles as $article) {
+            $articlesDetails[] = [
+                'id' => $article->getId(),
+                'title' => $article->getTitle(),
+                'image' => $article->getImage(),
+                'text' => $article->getText(),
+                'status' => $article->isStatus(),
+                'creator' => $article->getCreator()->getName(),
+                'categorie' => $article->getCategorie()->getName(),
+                'createdAt' => $article->getCreatedAt()->format('d/m/Y H:i'),
+            ];
+        }
+
         return $this->render('article/index.html.twig', [
-            'articles' => $articleRepository->findAll(),
+            'articles' => $articlesDetails,
         ]);
     }
 

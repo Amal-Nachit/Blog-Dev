@@ -27,9 +27,9 @@ class ArticleType extends AbstractType
             ->add('categorie', EntityType::class, [
                 'class' => categorie::class,
                 'choice_label' => 'name',
-                'multiple' => true,
+                // 'multiple' => true,
             ])
-            ->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'setCreatedAt'])
+            // ->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'setCreatedAt'])
         ;
     }
 
