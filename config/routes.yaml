@@ -20,6 +20,18 @@ api_article:
     path: /api/articles
     controller: App\Controller\API\ArticleController::index
 
+api_article_show:
+    path: /api/articles/{id}
+    controller: App\Controller\API\ArticleController::show
+
 app_article_index:
     path: /articles
     controller: App\Controller\ArticleController::index
+
+api_users:
+    path: /api/users
+    controller: App\Controller\API\UserController::index
+
+api_users_show:
+    path: /api/users/{id}
+    controller: App\Controller\API\UserController::show
