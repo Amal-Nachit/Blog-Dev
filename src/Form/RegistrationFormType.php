@@ -4,9 +4,12 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
@@ -20,7 +23,6 @@ class RegistrationFormType extends AbstractType
             ->add('name')
             ->add('lastname')
             ->add('email')
-            ->add('rgpd')
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
@@ -46,6 +48,10 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('rgpd', HiddenType::class, [
+                'mapped' => false,
+            ])
+            ->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'setDateRgpd']);
         ;
     }
 
@@ -54,5 +60,14 @@ class RegistrationFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => User::class,
         ]);
+    }
+
+    public function setDateRgpd(PreSubmitEvent $event)
+    {
+        $data = $event->getData();
+        if (empty($data['rgpd'])) {
+            $data['rgpd'] = (new \DateTime())->format('Y-m-d');
+            $event->setData($data);
+        }
     }
 }
