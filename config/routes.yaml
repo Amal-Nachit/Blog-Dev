@@ -12,6 +12,10 @@ admin:
     path: /admin
     controller: App\Controller\AdminController::index
 
+register:
+    path: /register
+    controller: App\Controller\RegistrationController::index
+
 login:
     path: /login
     controller: App\Controller\SecurityController::index

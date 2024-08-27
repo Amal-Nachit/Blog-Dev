@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Article;
-use App\Entity\categorie;
+use App\Entity\Categorie;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -25,9 +25,8 @@ class ArticleType extends AbstractType
             ])
             ->add('text')
             ->add('categorie', EntityType::class, [
-                'class' => categorie::class,
+                'class' => Categorie::class,
                 'choice_label' => 'name',
-                'multiple' => true,
             ])
             ->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'setCreatedAt'])
         ;
