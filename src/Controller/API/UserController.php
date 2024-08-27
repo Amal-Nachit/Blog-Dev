@@ -7,7 +7,6 @@ use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
-
 #[Route('/api/user', name:"app_api_user_")]
 class UserController extends AbstractController {
     #[Route('s', name:"index")]
