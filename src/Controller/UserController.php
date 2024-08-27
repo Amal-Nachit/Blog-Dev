@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Article;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\ArticleRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,10 +45,14 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
-    public function show(User $user): Response
+
+    public function show(Article $articles, User $user, ArticleRepository $articleRepository): Response
     {
+
+        $articles = $articleRepository->findBy(['creator' => $user]);
         return $this->render('user/show.html.twig', [
             'user' => $user,
+            'articles' => $articles,
         ]);
     }
 
@@ -77,5 +83,17 @@ class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/user/{id}/articles', name: 'app_user_articles')]
+    public function userArticles(User $user, ArticleRepository $articleRepository): Response
+    {
+        // Récupérer les articles créés par l'utilisateur
+        $articles = $articleRepository->findBy(['creator' => $user]);
+
+        return $this->render('user/articles.html.twig', [
+            'user' => $user,
+            'articles' => $articles,
+        ]);
     }
 }
