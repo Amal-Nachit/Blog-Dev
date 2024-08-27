@@ -1,9 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User index{% endblock %}
+{% block title %}Articles{% endblock %}
 
 {% block body %}
-    <h1>User index</h1>
+<header class="flex items-center justify-between mb-4 p-4">
+    <div class="flex-1 flex justify-center">
+        <img src="{{ asset('images/logo1.png') }}" alt="Logo" class="h-40 w-40">
+    </div>
+    <div class="flex justify-end space-x-4">
+        <a href="{{ path('app_dashboard') }}" class="mr-2">Tous les articles</a>
+        <a href="{{ path('app_logout') }}">Se déconnecter</a>
+    </div>
+</header>
 
     <table class="table">
         <thead>

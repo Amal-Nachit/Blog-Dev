@@ -48,7 +48,7 @@ class Article
     #[Groups(['article.index', 'article.show'])]
     private ?string $text = null;
 
-    #[ORM\ManyToOne(inversedBy: 'articles')]
+    #[ORM\ManyToMany(inversedBy: 'articles', targetEntity: Categorie::class)]
     #[Groups(['article.index', 'article.show'])]
     private ?Categorie $categorie = null;
 
@@ -162,6 +162,9 @@ class Article
 
     private $timeAgo;
 
+    #[ORM\Column]
+    private ?bool $approved = null;
+
     public function setTimeAgo(string $timeAgo): void
     {
         $this->timeAgo = $timeAgo;
@@ -170,5 +173,17 @@ class Article
     public function getTimeAgo(): string
     {
         return $this->timeAgo;
+    }
+
+    public function isApproved(): ?bool
+    {
+        return $this->approved;
+    }
+
+    public function setApproved(bool $approved): static
+    {
+        $this->approved = $approved;
+
+        return $this;
     }
 }

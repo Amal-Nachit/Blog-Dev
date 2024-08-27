@@ -11,9 +11,10 @@ use Symfony\Component\Routing\Attribute\Route;
 class DashboardController extends AbstractController
 {
     #[Route('/dashboard', name: 'app_dashboard')]
-    public function index(ArticleRepository $articleRepository): Response
+    public function index(ArticleRepository $articleRepository, UserRepository $user): Response
     {
         $articles = $articleRepository->findAll();
+        $user = $user->findAll();   
 
         $currentDate = new \DateTime();
         foreach ($articles as $article) {
