@@ -51,7 +51,7 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse('/admin');
+        return new RedirectResponse('/Dashboard');
     }
 
     protected function getLoginUrl(Request $request): string
